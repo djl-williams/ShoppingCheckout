@@ -66,5 +66,17 @@ namespace CheckoutTests
             Assert.AreEqual(1.30m, total);
         }
 
+        [TestMethod]
+        public void BiscuitAppleBiscuitReturnsCorrectPrice()
+        {
+            _checkout.Scan("B15");  // First pack of Biscuits
+            _checkout.Scan("A99");  // Apple
+            _checkout.Scan("B15");  // Second pack of Biscuits
+
+            decimal total = _checkout.CalculateTotal();
+
+            Assert.AreEqual(0.95m, total);
+        }
+
     }
 }
