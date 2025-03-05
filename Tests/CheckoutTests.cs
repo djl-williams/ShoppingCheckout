@@ -14,7 +14,6 @@ namespace CheckoutTests
         [TestInitialize]
         public void Setup()
         {
-            
             _items = new List<Item>
             {
                 new Item { SKU = "A99", UnitPrice = 0.50m },
@@ -33,7 +32,7 @@ namespace CheckoutTests
         }
 
         [TestMethod]
-        public void Scan_SingleItem_ReturnsCorrectPrice()
+        public void SingleItemReturnsCorrectPrice()
         {
             _checkout.Scan("A99");
 
@@ -41,5 +40,31 @@ namespace CheckoutTests
 
             Assert.AreEqual(0.50m, total);
         }
+
+        [TestMethod]
+        public void MultipleItemsReturnCorrectPrice()
+        {
+            _checkout.Scan("A99");
+            _checkout.Scan("B15");
+            _checkout.Scan("C40");
+
+            decimal total = _checkout.CalculateTotal();
+
+            // 0.50 + 0.30 + 0.60 = 1.40
+            Assert.AreEqual(1.40m, total);
+        }
+
+        [TestMethod]
+        public void ItemsWithOfferReturnsDiscountedPrice()
+        {
+            _checkout.Scan("A99");
+            _checkout.Scan("A99");
+            _checkout.Scan("A99");
+
+            decimal total = _checkout.CalculateTotal();
+
+            Assert.AreEqual(1.30m, total);
+        }
+
     }
 }
